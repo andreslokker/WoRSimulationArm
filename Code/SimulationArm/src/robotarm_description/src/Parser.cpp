@@ -10,8 +10,8 @@ Parser::~Parser() {
 
 bool Parser::setMessageValue(Message& message, const std::string& parsedValue, CommandParts commandPart) {
     if(commandPart == ServoNumber) {
-        uint8_t value = std::stoi(parsedValue);
-        if(value > 0 && value <= 5) { // servo number
+        uint16_t value = std::stoi(parsedValue);
+        if(value >= 0 && value <= 5) { // servo number
             message.servo = value;
             return true;
         }
@@ -32,7 +32,8 @@ bool Parser::setMessageValue(Message& message, const std::string& parsedValue, C
 }
 
 bool Parser::parseCommand(std::vector<Message>& commands, const std::string& command) {
-    Message message;
+    Message message = {};
+    message.time = 1000;
     CommandParts part = ServoNumber;
     std::string parsed;
     for(std::string::const_iterator pos = command.begin(); pos != command.end(); pos++) {
@@ -48,7 +49,7 @@ bool Parser::parseCommand(std::vector<Message>& commands, const std::string& com
             part = Time;
         } else if (*pos != '#' && isdigit(*pos)) {
             parsed += *pos;
-        } else if (*pos != '#' && *pos != ' ') {
+        } else if (*pos != '#' && *pos != ' ' && *pos != '\r' && *pos != '\n') {
             return false;
         }
     }
@@ -57,11 +58,12 @@ bool Parser::parseCommand(std::vector<Message>& commands, const std::string& com
         if(!setMessageValue(message, parsed, part))
             return false;
     }
+
     commands.push_back(message);
     return true;
 }
 
-bool Parser::parseMessage(const std::string& input) {
+bool Parser::parseMessage(const std::string& input, MessageHandler& messageHandler) {
     std::vector<Message> commands;
     if(input.length() > 2 && input.at(input.length()-1) == '\n' && input.at(input.length()-2) == '\r') {
         std::size_t start = 0;
@@ -77,8 +79,11 @@ bool Parser::parseMessage(const std::string& input) {
             if(!parseCommand(commands, stringToParse)) {
                 return false;
             }
+            end = start+1;
         }
+        messageHandler.addCommand(commands);
+    } else {
+        return false;
     }
-    // voeg de vector to aan de queue // mogelijk op een losse thread??
     return true;
 }

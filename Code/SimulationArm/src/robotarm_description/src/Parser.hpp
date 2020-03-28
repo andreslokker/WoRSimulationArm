@@ -1,6 +1,7 @@
 #ifndef PARSER_HPP
 #define PARSER_HPP
 
+#include "MessageHandler.hpp"
 #include "Message.hpp"
 #include <string>
 #include <vector>
@@ -59,10 +60,12 @@ class Parser {
          * the format written in the lynxmotion datasheet
          * 
          * @param input string to parse
+         * @param messageHandler The handler which handles new messages. In case of a message with a wrong format
+         * no commands will be added
          * @return true In case the parsed input string is from the right format
          * @return false In case the parsed input strirng is not from the right format
          */
-        bool parseMessage(const std::string& input);
+        bool parseMessage(const std::string& input, MessageHandler& messageHandler);
 };
 
 #endif

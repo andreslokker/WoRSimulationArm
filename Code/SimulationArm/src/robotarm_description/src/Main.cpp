@@ -1,23 +1,38 @@
 #include <ros/ros.h>
+#include <boost/bind.hpp>
 #include "Joints.hpp"
-
+#include "Parser.hpp"
 #include "MessageHandler.hpp"
+#include "robotarm_description/SSC32UPosition.h"
 #include <vector>
+#include <iostream>
 
-std::string message = "<message>";
+void callback(const robotarm_description::SSC32UPosition::ConstPtr& msg, MessageHandler* messageHandler, Parser* parser) {
+    std::cout << parser->parseMessage(msg->SSC32UPosition, *messageHandler) << std::endl;
+}
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "joint_state_publisher");
+    Parser parser;
     MessageHandler messageHandler;
+    ros::NodeHandle n;
+    ros::Subscriber sub = n.subscribe<robotarm_description::SSC32UPosition>("SSC32UPosition", 1000, boost::bind(callback, _1, &messageHandler, &parser));
 
+    ros::Rate loopRate(60);
+
+    while(ros::ok()) {
+        messageHandler.run();
+        ros::spinOnce();
+        loopRate.sleep();
+    }
 
     //Joints joints;
-    ros::Rate loop_rate(120);
+    //ros::Rate loop_rate(120);
     //double degree = M_PI/180;
 
     //double position = -3.14;
     //double angle = 10;
-
+/*
 
                 // TEMPORARY CODE TO AVOID PARSER
             Message message;
@@ -134,30 +149,6 @@ int main(int argc, char** argv) {
             messageHandler.addCommand(commands4);
             messageHandler.run();
             // --> end TEMPORARY CODE
-
-
-
-    while(true) {
-
-
-        //std::vector<double> pos;
-        //for(int i = 0; i < 7; i++) {
-          //  pos.push_back(position);
-        //}
-
-        //joints.move(pos, angle);
-        //if(position >= 3.14) {
-          //  position = -3.14;
-        //} else {
-          //  position += 0.01;
-       // }
-
-        //if(angle >= 180) {
-         //   angle = 0;
-        //} else {
-         //   angle += degree/4;
-        //}
-        loop_rate.sleep();
-    }
+            */
     return 0;
 }

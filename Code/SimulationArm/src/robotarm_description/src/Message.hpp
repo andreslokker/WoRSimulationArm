@@ -9,7 +9,7 @@
  * 
  */
 struct Message {
-    uint8_t servo; // servo number
+    uint16_t servo; // servo number
     double position; // position in PWM or Radians, can be converted with convertPwmToRadian
     uint16_t time; // time to move servo
 

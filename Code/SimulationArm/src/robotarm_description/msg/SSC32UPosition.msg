@@ -1,0 +1,1 @@
+string SSC32UPosition

@@ -9,8 +9,9 @@
 
   <node name="robot_arm" pkg="robotarm_description" type="robot_arm" output="screen"/>
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+  <node name="controller" pkg="controller" type="controller"/>
   <node name="basic_shapes" pkg="object" type="basic_shapes" output="screen"/>
-  
+
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" output="screen" />
 
 </launch>
