@@ -205,6 +205,8 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
+FILE(GLOB SOURCES src/*.cpp)
 include_directories(include ${catkin_INCLUDE_DIRS})
-add_executable(robot_arm src/Main.cpp src/Joints.cpp src/MessageHandler.cpp src/Parser.cpp)
+add_executable(robot_arm ${SOURCES})
 target_link_libraries(robot_arm ${catkin_LIBRARIES})
+add_dependencies(robot_arm robotarm_description_generate_messages_cpp)

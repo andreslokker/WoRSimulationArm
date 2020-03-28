@@ -25,7 +25,6 @@ void MessageHandler::handleCommand() {
 
 void MessageHandler::run() {
     if(!commands.empty()) {
-        std::cout << "not empty" << std::endl;
         handleCommand();
         commands.pop();
     }

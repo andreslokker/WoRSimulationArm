@@ -205,6 +205,7 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_executable(controller src/Main.cpp)
+FILE(GLOB SOURCES src/*.cpp)
+add_executable(controller ${SOURCES})
 target_link_libraries(controller ${catkin_LIBRARIES})
 add_dependencies(controller ${catkin_EXPORTED_TARGETS})

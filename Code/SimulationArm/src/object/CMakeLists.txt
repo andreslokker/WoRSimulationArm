@@ -205,5 +205,6 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_executable(basic_shapes src/Main.cpp src/Cup.cpp src/Gravity.cpp)
+FILE(GLOB SOURCES src/*.cpp)
+add_executable(basic_shapes ${SOURCES})
 target_link_libraries(basic_shapes ${catkin_LIBRARIES})

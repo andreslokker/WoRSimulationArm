@@ -18,10 +18,12 @@ int main(int argc, char** argv) {
     ros::NodeHandle n;
     ros::Publisher pub = n.advertise<robotarm_description::SSC32UPosition>("SSC32UPosition", 1000);
 
+    ros::Duration(1).sleep();
+
     while(pub.getNumSubscribers() < 1) {
 
     }
-
+    
     // these messages will be send to the robotarm
     robotarm_description::SSC32UPosition msg;
     msg.SSC32UPosition = "#0 P1500 T3000 #1 P1500 T3000 #2 P2450 T3000 #3 P800 T4000"
@@ -31,7 +33,7 @@ int main(int argc, char** argv) {
     ros::Duration(1).sleep();
 
     robotarm_description::SSC32UPosition msg2;
-    msg2.SSC32UPosition = "#1 P2500 T3000 #5 P1900 \r\n";
+    msg2.SSC32UPosition = "#1 P2500 T3000 #2 P2500 T1000 #5 P1500 \r\n";
     pub.publish(msg2);
 
     ros::Duration(1).sleep();
@@ -43,7 +45,7 @@ int main(int argc, char** argv) {
     ros::Duration(1).sleep();
 
     robotarm_description::SSC32UPosition msg4;
-    msg4.SSC32UPosition = "#5 P2500 T2000 \r\n";
+    msg4.SSC32UPosition = "#5 P1000 T2000 \r\n";
     pub.publish(msg4);
 
     return 0;

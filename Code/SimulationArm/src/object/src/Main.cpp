@@ -5,10 +5,13 @@ int main(int argc, char** argv) {
     ros::init(argc, argv, "cup_shape");
 
     Cup cup;
+
+    ros::Duration(1).sleep();
+
     cup.initCup();
     cup.publishCup();
     
-    ros::Rate loop_rate(120);
+    ros::Rate loop_rate(60);
     while(ros::ok()) {
         cup.checkForGripper();
         if(cup.isHold()) {
@@ -16,6 +19,5 @@ int main(int argc, char** argv) {
         }
         loop_rate.sleep();
     }
-    ros::spin();
     return 0;
 }
