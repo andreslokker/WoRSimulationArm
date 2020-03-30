@@ -15,6 +15,7 @@ int main(int argc, char** argv) {
     ros::init(argc, argv, "joint_state_publisher");
     Parser parser;
     MessageHandler messageHandler;
+
     ros::NodeHandle n;
     ros::Subscriber sub = n.subscribe<robotarm_description::SSC32UPosition>("SSC32UPosition", 1000, boost::bind(callback, _1, &messageHandler, &parser));
 

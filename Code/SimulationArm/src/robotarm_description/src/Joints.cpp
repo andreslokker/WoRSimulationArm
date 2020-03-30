@@ -1,6 +1,6 @@
 #include "Joints.hpp"
 
-#define UPDATE_INTERVAL 18
+#define UPDATE_INTERVAL 30
 #define UPDATE_MARGE 0.01
 
 Joints::Joints() : joint_pub(n.advertise<sensor_msgs::JointState>("joint_states", 1000)) {
@@ -12,7 +12,7 @@ Joints::~Joints() {
 }
 
 void Joints::initJoints() {
-    ros::Duration(1).sleep();
+    ros::Duration(1).sleep(); // we wait 1 second to wait on other applications
     jointState.name.resize(7);
     jointState.position.resize(7);
     jointState.name[0] = "base_link2turret";
@@ -26,10 +26,8 @@ void Joints::initJoints() {
     //these are the starting positions of the arm.
     // future: maybe read these values from the arm URDF file
     for(std::size_t i = 0; i < radianRange.size(); i++) {
-        jointState.position[i] = /*(radianRange.at(i).at(0) + radianRange.at(i).at(1)) / 2*/ 0;
+        jointState.position[i] = 0;
     }
-    jointState.position[1] = 0.01;
-    jointState.position[2] = 0.01;
 
     jointState.header.stamp = ros::Time::now();
     joint_pub.publish(jointState);
@@ -61,6 +59,7 @@ void Joints::move(const std::vector<Message>& commands) {
             }
             jointState.position[6] = jointState.position[5]; // we copy over the left gripper position to the right gripper
             joint_pub.publish(jointState);
+            gripper.checkForCup();
             lastMillis = ros::Time::now();
         }
     }

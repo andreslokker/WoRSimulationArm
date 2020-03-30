@@ -12,9 +12,10 @@
 #ifndef CUP_HPP
 #define CUP_HPP
 
-#include <ros/ros.h>
-#include <visualization_msgs/Marker.h>
-#include <tf/transform_listener.h>
+#include "ros/ros.h"
+#include "visualization_msgs/Marker.h"
+#include "geometry_msgs/PoseStamped.h"
+#include "std_msgs/Bool.h"
 
 /**
  * @brief The Cup class can be used to add a new cup to Rviz. It also does contain some useful functions to check if it is gripped at the moment
@@ -35,31 +36,24 @@ class Cup {
         virtual ~Cup();
 
         /**
-         * @brief This function should be called when the cup is gripped. It will follow the movement of the gripper.
+         * @brief Callback function for the markerInGripper subscriber. It will change the color of the marker based on the message
+         * Also it will call the gravity function if needed
+         * @param msg Message containing a boolean value if the marker is gripped
          */
-        void moveCup();
+        void gripperHoldCB(const std_msgs::Bool::ConstPtr& msg);
 
         /**
-         * @brief This function can convert a point from one frame to a new frame
+         * @brief Callback function for the gripperPos subscriber. It will update the position of the marker and publish it.
          * 
-         * @param oldType Old frame
-         * @param newType New frame to convert the position to
-         * @param x X position
-         * @param y Y position
-         * @param z Z position
-         * @param Qx X orientation
-         * @param Qy Y orientation
-         * @param Qz Z orientation
-         * @param Qw W orientation
-         * @return geometry_msgs::PoseStamped The point converted to the newType frame
+         * @param msg Message containing the position of the marker
          */
-        geometry_msgs::PoseStamped convertPoint(const std::string& oldType, const std::string& newType, double x, double y, double z, double Qx = 0, double Qy = 0, double Qz = 0, double Qw = 1);
-        
+        void posUpdateByGripperCB(const geometry_msgs::PoseStamped::ConstPtr& msg);
+
         /**
-         * @brief This function checks if the cup is gripped at the moment. Also when the cup is gripped, but the gripper releases the cup, a gravity function will be called
-         * so that the cup drops down.
+         * @brief Function which publishes the marker pose
+         * 
          */
-        void checkForGripper();
+        void sendNewPosition();
 
         /**
          * @brief Initialization functon for the cup (start position and orientation etc.)
@@ -73,21 +67,13 @@ class Cup {
          */
         void publishCup();
 
-        /**
-         * @brief Boolen which returns if the gripper is hold
-         * 
-         * @return true In case it is hold
-         * @return false In case it is not hold
-         */
-        bool isHold();
     private:
         ros::NodeHandle n;
         visualization_msgs::Marker marker;
-        tf::TransformListener listener;
         ros::Publisher markerPublisher;
-        ros::Subscriber jointsSubscriber;
+        ros::Subscriber gripperPos;
+        ros::Subscriber markerInGripper;
         bool hold = false;
-        double distGripper = 0;
 };
 
 

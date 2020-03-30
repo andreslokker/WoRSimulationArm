@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
     ros::Duration(1).sleep();
 
     while(pub.getNumSubscribers() < 1) {
-
+        // wait on the robotarm
     }
     
     // these messages will be send to the robotarm

@@ -16,6 +16,7 @@
 #include <sensor_msgs/JointState.h>
 #include <tf/transform_broadcaster.h>
 #include "Message.hpp"
+#include "Gripper.hpp"
 #include <vector>
 #include <string>
 
@@ -60,6 +61,7 @@ class Joints {
         ros::NodeHandle n;
         ros::Publisher joint_pub;
         sensor_msgs::JointState jointState;
+        Gripper gripper;
         std::array<std::array<double, 2>, 7> radianRange = {{
             {{-M_PI/2, M_PI/2}}, // base
             {{-M_PI/2, M_PI/5}}, // shoulder

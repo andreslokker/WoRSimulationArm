@@ -13,10 +13,8 @@ int main(int argc, char** argv) {
     
     ros::Rate loop_rate(60);
     while(ros::ok()) {
-        cup.checkForGripper();
-        if(cup.isHold()) {
-            cup.moveCup();
-        }
+        cup.sendNewPosition();
+        ros::spinOnce();
         loop_rate.sleep();
     }
     return 0;
