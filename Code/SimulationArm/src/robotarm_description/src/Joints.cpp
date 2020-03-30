@@ -4,6 +4,7 @@
 #define UPDATE_MARGE 0.01
 
 Joints::Joints() : joint_pub(n.advertise<sensor_msgs::JointState>("joint_states", 1000)) {
+    ros::Duration(1).sleep(); // we wait 1 second on other applications to subscribe
     initJoints();
 }
 
@@ -12,7 +13,6 @@ Joints::~Joints() {
 }
 
 void Joints::initJoints() {
-    ros::Duration(1).sleep(); // we wait 1 second to wait on other applications
     jointState.name.resize(7);
     jointState.position.resize(7);
     jointState.name[0] = "base_link2turret";

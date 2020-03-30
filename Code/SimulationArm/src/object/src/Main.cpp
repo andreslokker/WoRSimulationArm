@@ -6,7 +6,7 @@ int main(int argc, char** argv) {
 
     Cup cup;
 
-    ros::Duration(1).sleep();
+    ros::Duration(1).sleep(); // wait for other applications to start
 
     cup.initCup();
     cup.publishCup();

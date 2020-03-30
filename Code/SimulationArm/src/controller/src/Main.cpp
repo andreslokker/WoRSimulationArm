@@ -18,13 +18,15 @@ int main(int argc, char** argv) {
     ros::NodeHandle n;
     ros::Publisher pub = n.advertise<robotarm_description::SSC32UPosition>("SSC32UPosition", 1000);
 
-    ros::Duration(1).sleep();
+    ros::Duration(1).sleep(); // wait for other applications to start
 
     while(pub.getNumSubscribers() < 1) {
         // wait on the robotarm
     }
     
     // these messages will be send to the robotarm
+    ros::Duration(1).sleep();
+
     robotarm_description::SSC32UPosition msg;
     msg.SSC32UPosition = "#0 P1500 T3000 #1 P1500 T3000 #2 P2450 T3000 #3 P800 T4000"
                         " #4 P1500 T5000 #5 P2000 T2000 \r\n";

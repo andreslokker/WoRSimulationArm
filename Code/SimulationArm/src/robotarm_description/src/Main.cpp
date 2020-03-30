@@ -13,10 +13,12 @@ void callback(const robotarm_description::SSC32UPosition::ConstPtr& msg, Message
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "joint_state_publisher");
+    ros::NodeHandle n;
+    ros::Duration(1).sleep(); // wait on other applications to start
+
     Parser parser;
     MessageHandler messageHandler;
 
-    ros::NodeHandle n;
     ros::Subscriber sub = n.subscribe<robotarm_description::SSC32UPosition>("SSC32UPosition", 1000, boost::bind(callback, _1, &messageHandler, &parser));
 
     ros::Rate loopRate(60);
