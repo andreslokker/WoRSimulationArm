@@ -1,0 +1,33 @@
+@startuml
+
+class Cup {
+    -n : ros::NodeHandle
+    -marker : visualization_msgs::Marker
+    -markerPublisher : ros::Publisher
+    -gripperPos : ros::Subscriber
+    -markerInGripper : ros::Subscriber
+    -hold : bool
+    +Cup()
+    +~Cup()
+    +GripperHoldCB(msg : const std_msgs::Bool::ConstPtr&) : void
+    +posUpdateByGripperCB(msg : const geometry::PoseStamped::ConstPtr&) : void
+    +sendNewPosition() : void
+    +initCup() : void
+    +publishCup() : void
+}
+
+class Gravity {
+    -lastMillis : ros::Time
+    +Gravity()
+    +~Gravity()
+    +updatePosGravity(marker : visualization_msgs::Marker&, cup : Cup*) : void
+}
+
+class Main {
+    +main(argc : int, argv : char**) : int
+}
+
+Main -- Cup
+Cup -- Gravity
+
+@enduml

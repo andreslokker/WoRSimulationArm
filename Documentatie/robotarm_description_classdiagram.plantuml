@@ -1,0 +1,68 @@
+@startuml
+
+class Gripper {
+    -n : ros::NodeHandle
+    -markerSubscriber : ros::Subscriber
+    -markerCtrPointPublisher : ros::Publisher
+    -markerInGripper : ros::Publisher
+    -listener : tf::TransformListener
+    -marker : visualization_msgs
+    +Gripper()
+    +~Gripper()
+    +callback(msg : const visualization_msgs::Marker::ConstPtr&) : void
+    +convertPoint(oldType : const std::string&, newType : const std::string&, x : double, y : double, z : double, Qx : double, Qy : double, Qz : double, Qw : double) : geometry_msgs::PoseStamped
+    +checkForCup() : void 
+}
+
+class Joints {
+    -n : ros::NodeHandle
+    -joint_pub : ros::Publisher
+    -jointState : sensor_msgs::JointState
+    -gripper : Gripper
+    -radianRange : std::array<std::array<double, 2>, 7>
+    +Joints()
+    +~Joints()
+    +initJoints() : void
+    +move(commands : const std::vector<Message>&) : void
+    +const getRadianRange() : const std::array<std::array<double, 2>, 7>&
+}
+
+class Main {
+    +main(argc : int, argc : char**) : int
+    +callback(msg : const robotarm_description::SSC32UPosition::ConstPtr&, messageHandler : MessageHandler*, parser : Parser*) : void
+}
+
+class "<<Struct>>\nMessage" {
+    +servo : uint16_t
+    +position : double
+    +time : uint16_t
+    +convertPwmToRadian(minPwm : uint16_t, maxPwm : uint16_t, minRadian : double, maxRadian : double) : void
+}
+
+class MessageHandler {
+    -joints : Joints
+    -commands : std::queue<std::vector<Message> >
+    +MessageHandler()
+    +~MessageHandler()
+    +addCommand(command : const std::vector<Message>&) : void
+    +handleCommand() : void
+    +run() : void
+}
+
+class Parser {
+    +Parser()
+    +~Parser()
+    +setMessageValue(message : Message&, parserValue : const std::string&, commandPart : CommandParts) : bool
+    +parseCommand(commands : std::vector<Message>&, command : const std::string&) : bool
+    +parseMessage(input : const std::string&, messageHandler : MessageHandler&) : bool
+}
+
+Main -- MessageHandler
+Main -- Parser
+MessageHandler -- Joints
+Joints -- Gripper
+Parser --> "<<Struct>>\nMessage"
+MessageHandler --> "<<Struct>>\nMessage"
+Joints --> "<<Struct>>\nMessage"
+
+@enduml
