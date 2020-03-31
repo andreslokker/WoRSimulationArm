@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/andre/WoR/repos/WoRSimulationArm/WoRSimulationArm/Code/SimulationArm/devel/include/**",
+                "/opt/ros/melodic/include/**",
+                "/home/andre/WoR/repos/WoRSimulationArm/WoRSimulationArm/Code/SimulationArm/src/controller/include/**",
+                "/home/andre/WoR/repos/WoRSimulationArm/WoRSimulationArm/Code/SimulationArm/src/robotarm_description/include/**",
+                "/usr/include/**"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}
